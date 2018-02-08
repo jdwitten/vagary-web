@@ -10,4 +10,4 @@ app.use('/drafts', drafts)
 app.use('/posts', posts)
 
 
-app.listen(3000, () => console.log('Vagary api listening on port 3000!'))
+app.listen(80, () => console.log('Vagary api listening on port 80!'))
