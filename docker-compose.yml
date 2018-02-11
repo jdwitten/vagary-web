@@ -26,17 +26,16 @@ services:
         constraints: [node.role == manager]
     networks:
       - webnet
-  redis:
-    image: redis
-    ports:
-      - "6379:6379"
+  db:
+    image: mysql
     volumes:
-      - "/home/docker/data:/data"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-    command: redis-server --appendonly yes
-    networks:
-      - webnet
+      - "./.data/db:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: "P@11word"
+      MYSQL_DATABASE: "vagary-mysqldb"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "P@11word"
+    ports:
+      - "3306:3306"
 networks:
   webnet:
