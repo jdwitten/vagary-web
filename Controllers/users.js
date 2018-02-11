@@ -1,3 +1,5 @@
+var express = require('express')
+var router = express.Router()
 var User = require("./Models/user.js")
 var getConnection = require("./Data/pool.js")
 
@@ -8,3 +10,5 @@ router.get('/', function (req, res) {
     }
   })
 })
+
+modules.exports = router
