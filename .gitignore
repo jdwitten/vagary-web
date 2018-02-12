@@ -63,6 +63,3 @@ typings/
 
 # docker data files
 .data
-
-# secrets directory
-.secrets/
