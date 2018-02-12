@@ -4,7 +4,7 @@ var dev_secrets = {
 }
 
 var prod_secrets = {
-  mysqldbhost: "ec2-18-219-0-191.us-east-2.compute.amazonaws.com",
+  mysqldbhost: "localhost",
   mysqldbpassword: "P@11word",
 }
 
