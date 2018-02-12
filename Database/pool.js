@@ -2,7 +2,7 @@ var mysql = require("mysql");
 var secrets = require("../secrets/secrets.js")
 var pool = mysql.createPool({
   connectionLimit : 10,
-  host            : 'localhost',
+  host            : 'db',
   user            : 'root',
   password        : 'P@11word',
   database        : 'vagary-mysqldb'
