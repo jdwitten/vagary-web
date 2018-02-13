@@ -15,8 +15,6 @@ services:
       - "80:80"
     networks:
       - webnet
-    links:
-      - db:db
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
