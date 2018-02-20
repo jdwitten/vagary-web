@@ -35,8 +35,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "P@11word"
       MYSQL_DATABASE: "vagary-mysqldb"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: "P@11word"
     ports:
       - "3306:3306"
 networks:
