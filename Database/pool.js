@@ -5,7 +5,8 @@ var pool = mysql.createPool({
   host            : 'db',
   user            : 'root',
   password        : 'P@11word',
-  database        : 'vagary-mysqldb'
+  database        : 'vagarydb',
+  port            : '3306'
 });
 
 exports.getConnection = function(callback) {

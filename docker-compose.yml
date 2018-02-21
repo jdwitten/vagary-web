@@ -15,8 +15,6 @@ services:
       - "80:80"
     depends_on:
       - db
-    networks:
-      - webnet
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -26,16 +24,11 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
-    networks:
-      - webnet
   db:
-    image: mysql
-    volumes:
-      - "./.data/db:/var/lib/mysql"
+    image: mysql:8.0.2
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "P@11word"
-      MYSQL_DATABASE: "vagary-mysqldb"
+      MYSQL_DATABASE: vagarydb
+      MYSQL_ROOT_PASSWORD: P@11word
     ports:
-      - "3306:3306"
-networks:
-  webnet:
+      - "3308:3306"
