@@ -9,10 +9,25 @@ aws.config.region = "us-east-2"
 router.get('/', function (req, res) {
   var connection = pool.getConnection(function(err, connection){
     if(err) {
-      res.send(err)
+      return res.status(500).end()
     }
     connection.query('SELECT * FROM Posts WHERE author = ?', 1, function (error, results, fields) {
-      res.send({posts: results})
+      const posts = results.map(post => {
+        return {
+          id: post.id,
+          author: post.author,
+          body: post.body,
+          title: post.title,
+          trip: {
+            id: 0,
+            title: post.trip == null ? "" : post.trip,
+            posts: []
+          },
+          location: post.location
+        }
+      })
+      console.log(posts)
+      return res.json({posts: posts})
     })
   })
 })
@@ -20,14 +35,28 @@ router.get('/', function (req, res) {
 router.post('/', function (req, res) {
   var connection = pool.getConnection(function(err, connection){
     if(err) {
-      res.send(err)
+      console.log(err)
+      return res.send(err)
+    }
+    if(req.body == null ||
+       req.body.user == null ||
+       req.body.body == null ||
+       req.body.title == null ||
+       req.body.trip == null) {
+         console.log("invalid request body")
+         console.log(req.body)
+         return res.status(400).end()
     }
     console.log(req.body)
-    var post = [req.body.user, req.body.body, req.body.title, req.body.location, req.body.trip]
-    console.log(post)
-    connection.query('INSERT INTO Posts (author, body, title, location, trip) VALUES (?, ?, ?, ?, ?)', post, function (error, results, fields) {
-      console.log(error)
-      res.send({success: true})
+    var dateString = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    var post = [req.body.user, req.body.body, req.body.title, req.body.location, req.body.trip, dateString]
+    connection.query('INSERT INTO Posts (author, body, title, location, trip, date_created) VALUES (?, ?, ?, ?, ?, ?)', post, function (error, results, fields) {
+      if(error) {
+        console.log(error)
+        return res.status(400).end()
+      } else {
+        return res.json({success: true})
+      }
     })
   })
 })
@@ -47,7 +76,7 @@ router.get('/image/request', function (req, res) {
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
     if(err){
       console.log(err);
-      return res.end();
+      return res.status(500).end();
     }
     const returnData = {
       signedRequest: data,
