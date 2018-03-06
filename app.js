@@ -9,6 +9,7 @@ console.log(process.env.AWS_SECRET_ACCESS_KEY)
 var drafts = require('./Controllers/drafts')
 var posts = require('./Controllers/posts')
 var users = require('./Controllers/users')
+var authentication = require('./Controllers/Authentication/authentication')
 
 // parse application/json
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/drafts', drafts)
 app.use('/posts', posts)
 app.use('/users', users)
+app.use('/authentication', authentication)
 
 
 app.listen(81, () => console.log('Vagary api listening on port 80!'))
