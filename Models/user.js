@@ -7,7 +7,7 @@ function User(id, username, email, password) {
 }
 
 User.get = function(id, callback) {
-  console.log(id)
+  if(!id) callback(null, "Invalid ID")
   var connection = pool.getConnection( function(err, connection) {
     if(err) return callback(null, err)
     connection.query('SELECT * FROM Users WHERE id = ? LIMIT 1', id, function (error, result, fields) {

@@ -3,10 +3,11 @@ var router = express.Router()
 var pool = require("../Database/pool.js")
 var Post = require('../Models/post.js')
 var secrets = require('../secrets/secrets.js')
+var verifyToken = require("./Authentication/verifyToken.js")
 const aws = require('aws-sdk');
 aws.config.region = "us-east-2"
 
-router.get('/', function (req, res) {
+router.get('/', verifyToken, function (req, res) {
   var connection = pool.getConnection(function(err, connection){
     if(err) {
       return res.status(500).end()
