@@ -23,4 +23,4 @@ app.use('/users', users)
 app.use('/authentication', authentication)
 
 
-app.listen(81, () => console.log('Vagary api listening on port 80!'))
+app.listen(80, () => console.log('Vagary api listening on port 80!'))
