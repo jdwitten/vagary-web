@@ -13,13 +13,13 @@ router.post("/register", function(req, res) {
 
   var connection = pool.getConnection(function(err, connection){
     if(err) {
-      return res.status(500).end()
+      return res.status(500).json({error: err, gettingConnection: true})
     }
     var user = [req.body.username, req.body.email, hashedPassword]
     connection.query('INSERT INTO Users (username, email, password) VALUES (?, ?, ?)', user, function (error, result, fields) {
       if(error) {
         console.log(error)
-        return res.status(500).end
+        return res.status(500).json({error: error, query: true})
       }
 
       var token = jwt.sign({ id: result.insertId }, secrets.auth_secret, {
@@ -42,11 +42,11 @@ router.post("/login", function(req, res) {
   var connection = pool.getConnection(function(err, connection){
     if(err) {
       console.log(err)
-      return res.status(500).end()
+      return res.status(500).json({error: err})
     }
     var email = req.body.email
     connection.query('SELECT * FROM Users WHERE email = ? LIMIT 1', email, function (error, result, fields) {
-      if(error, !result, result.length < 1) return res.status(404).end()
+      if(error, !result, result.length < 1) return res.status(404).json({error: error})
       var user = result[0]
       var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
       if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
@@ -55,7 +55,7 @@ router.post("/login", function(req, res) {
       connection.query('INSERT INTO Tokens (email, id, token) VALUES (?, ?, ?)', tokenParams, function (error, result, fields) {
         if(error){
           console.log(error)
-          return res.status(500).end()
+          return res.status(500).json({error: error})
         }
         var token = jwt.sign({ id: user.id }, secrets.auth_secret, {
           expiresIn: 5 // expires in 24 hours

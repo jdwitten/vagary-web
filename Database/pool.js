@@ -1,24 +1,17 @@
 var mysql = require("mysql");
 var secrets = require("../secrets/secrets.js")
 
-var prod = {
+var db_config = {
   connectionLimit : 10,
-  host            : 'db',
-  user            : 'root',
-  password        : 'P@11word',
+  host            : secrets.mysqldbhost,
+  user            : secrets.mysqldbuser,
+  password        : secrets.mysqldbpassword,
   database        : 'vagarydb',
   port            : '3306'
 }
 
-var dev = {
-  connectionLimit : 10,
-  host            : 'localhost',
-  user            : 'root',
-  password        : 'P@11word',
-  database        : 'vagarydb',
-  port            : '3308'
-}
-var db_config = process.env.NODE_ENV == "production" ? prod : dev
+console.log(db_config)
+
 var pool = mysql.createPool(db_config);
 
 exports.getConnection = function(callback) {

@@ -1,0 +1,13 @@
+version: "3"
+volumes:
+  mysqldb:
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: vagarydb
+      MYSQL_ROOT_PASSWORD: P@11word
+    ports:
+      - "3306:3306"
+    volumes:
+      - "mysqldb:/var/lib/mysql"
