@@ -9,6 +9,7 @@ console.log("Environment: " + process.env.NODE_ENV)
 var drafts = require('./Controllers/drafts')
 var posts = require('./Controllers/posts')
 var users = require('./Controllers/users')
+var trips = require('./Controllers/trips')
 var authentication = require('./Controllers/Authentication/authentication')
 
 // parse application/json
@@ -21,6 +22,7 @@ app.use('/drafts', drafts)
 app.use('/posts', posts)
 app.use('/users', users)
 app.use('/auth', authentication)
+app.use('/trips', trips)
 
 
 app.listen(80, () => console.log('Vagary api listening on port 80!'))

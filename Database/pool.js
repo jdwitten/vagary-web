@@ -6,8 +6,8 @@ var db_config = {
   host            : secrets.mysqldbhost,
   user            : secrets.mysqldbuser,
   password        : secrets.mysqldbpassword,
-  database        : 'vagarydb',
-  port            : '3306'
+  database        : secrets.mysqldbname,
+  port            : secrets.mysqldbport
 }
 
 console.log(db_config)

@@ -33,14 +33,14 @@ router.get('/', verifyToken, function (req, res) {
   })
 })
 
-router.post('/', function (req, res) {
+router.post('/', verifyToken, function (req, res) {
   var connection = pool.getConnection(function(err, connection){
     if(err) {
       console.log(err)
       return res.send(err)
     }
     if(req.body == null ||
-       req.body.user == null ||
+       req.userId == null ||
        req.body.body == null ||
        req.body.title == null ||
        req.body.trip == null) {
@@ -50,7 +50,7 @@ router.post('/', function (req, res) {
     }
     console.log(req.body)
     var dateString = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    var post = [req.body.user, req.body.body, req.body.title, req.body.location, req.body.trip, dateString]
+    var post = [req.userId, req.body.body, req.body.title, req.body.location, req.body.trip, dateString]
     connection.query('INSERT INTO Posts (author, body, title, location, trip, date_created) VALUES (?, ?, ?, ?, ?, ?)', post, function (error, results, fields) {
       if(error) {
         console.log(error)

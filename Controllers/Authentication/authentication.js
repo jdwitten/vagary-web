@@ -46,19 +46,20 @@ router.post("/login", function(req, res) {
     }
     var email = req.body.email
     connection.query('SELECT * FROM Users WHERE email = ? LIMIT 1', email, function (error, result, fields) {
-      if(error, !result, result.length < 1) return res.status(404).json({error: error})
+      console.log(result)
+      if(error || (result !== null && result.length < 1)) return res.status(404).json({error: error})
       var user = result[0]
       var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
       if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
       var refreshToken = randtoken.uid(256)
       var tokenParams = [user.email, user.id, refreshToken]
-      connection.query('INSERT INTO Tokens (email, id, token) VALUES (?, ?, ?)', tokenParams, function (error, result, fields) {
+      connection.query('INSERT INTO Tokens (email, userId, token) VALUES (?, ?, ?)', tokenParams, function (error, result, fields) {
         if(error){
           console.log(error)
           return res.status(500).json({error: error})
         }
         var token = jwt.sign({ id: user.id }, secrets.auth_secret, {
-          expiresIn: 5 // expires in 24 hours
+          expiresIn: 86400 // expires in 24 hours
         });
         res.status(200).send({ auth: true, token: token, refresh: refreshToken, email: user.email });
       })
@@ -80,7 +81,7 @@ router.post("/token", function(req, res) {
         res.status(500).send()
       } else if(results == null, results.length < 1) {
         console.log("err")
-        res.status(401).json({ auth: false, message: 'Failed to refresh token .' })
+        res.status(401).json({ auth: false, message: 'Failed to refresh token.' })
       }
       for(var i=0; i<results.length; i++){
         if(results[i].token == refreshToken) {
@@ -91,7 +92,7 @@ router.post("/token", function(req, res) {
           return res.status(200).send({ auth: true, token: token, email: email, refresh: refreshToken  });
         }
       }
-      res.status(401).json({ auth: false, message: 'Failed to refresh token .' })
+      res.status(401).json({ auth: false, message: 'Failed to refresh token.' })
     });
   });
 });
