@@ -25,4 +25,16 @@ router.post('/', verifyToken, function (req, res) {
   })
 })
 
+router.get('/', verifyToken, function (req, res) {
+  if(req.userId == null) res.status(401).end()
+  db.getTrips(req.userId, function(err, trips) {
+    if(err) {
+      console.log(err)
+      return res.status(500).end()
+    } else {
+      return res.json({trips: trips})
+    }
+  })
+})
+
 module.exports = router

@@ -25,4 +25,4 @@ app.use('/auth', authentication)
 app.use('/trips', trips)
 
 
-app.listen(80, () => console.log('Vagary api listening on port 80!'))
+app.listen(secrets.port || 80, () => console.log('Vagary api listening on port: ' + secrets.port + '!'))
