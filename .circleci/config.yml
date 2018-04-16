@@ -1,6 +1,6 @@
 version: 2
 jobs:
-   build:
+   - build:
      docker:
        - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
        aws_auth:
@@ -9,12 +9,12 @@ jobs:
      steps:
        - checkout
        - run: echo "hello world"
-  deploy:
-    docker:
-      - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
-      aws_auth:
-        aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
-        aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY  # or project UI envar reference
-    steps:
-      - checkout
-      - run: echo "hello world"
+  - deploy:
+      docker:
+        - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
+        aws_auth:
+          aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
+          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY  # or project UI envar reference
+      steps:
+        - checkout
+        - run: echo "hello world"
