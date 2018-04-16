@@ -8,8 +8,8 @@ jobs:
           aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
     steps:
       - run:
-        name: "test"
-        command: echo 'test'"
+          name: "test"
+          command: echo 'test'"
   deploy:
     docker:
       - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
@@ -18,8 +18,8 @@ jobs:
           aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
     steps:
       - run:
-        name: "test"
-        command: echo 'test'"
+          name: "test"
+          command: echo 'test'"
 
 workflows:
   version: 2
