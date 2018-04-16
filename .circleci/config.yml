@@ -18,10 +18,22 @@ jobs:
           name: Push application Docker image
           command: bash ./deploy.sh
   deploy:
+    docker:
+      - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
+        aws_auth:
+          aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
+          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
     steps:
+      - checkout
+      - setup_remote_docker
       - run:
-          name: "test"
-          command: echo 'test'
+          name: Install dependencies
+          command: |
+            apk add --no-cache py-pip=9.0.0-r1
+            pip install awscli==1.11.76
+      - run:
+          name: Push application Docker image
+          command: bash ./deploy.sh
 
 workflows:
   version: 2
