@@ -6,12 +6,16 @@ jobs:
         aws_auth:
           aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
           aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
+    steps:
+      - command: "echo 'test'"
   deploy:
     docker:
       - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
         aws_auth:
           aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
           aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
+    steps:
+      - command: "echo 'test'"
 
 workflows:
   version: 2
