@@ -9,7 +9,7 @@ jobs:
     steps:
       - run:
           name: "test"
-          command: echo 'test'"
+          command: echo 'test'
   deploy:
     docker:
       - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
@@ -19,7 +19,7 @@ jobs:
     steps:
       - run:
           name: "test"
-          command: echo 'test'"
+          command: echo 'test'
 
 workflows:
   version: 2
