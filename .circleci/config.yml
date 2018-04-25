@@ -1,53 +1,36 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
-        aws_auth:
-          aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
-          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache py-pip=9.0.0-r1
-            pip install awscli==1.11.76
-      - run:
-          name: Push application Docker image
-          command: bash ./deploy.sh
   deploy:
     docker:
-      - image: 959526929918.dkr.ecr.us-east-2.amazonaws.com/vagary-web
-        aws_auth:
-          aws_access_key_id: AKIAIRB6V7DBZIMUTF4A
-          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
+      - image: circleci/python:2.7
+    working_directory: ~/repo
     steps:
       - checkout
-      - setup_remote_docker
       - run:
-          name: Install dependencies
+          name: Install awscli
           command: |
-            apk add --no-cache py-pip=9.0.0-r1
-            pip install awscli==1.11.76
+            sudo pip install awsebcli --upgrade
       - run:
-          name: Push application Docker image
-          command: bash ./deploy.sh
-
+          name: Create AWS credentials manually
+          command: |
+            mkdir ~/.aws
+            touch ~/.aws/config
+            chmod 600 ~/.aws/config
+            echo "[profile eb-cli]" > ~/.aws/config
+            echo "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/config
+            echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/config
+      - run:
+          name: Deploy to EB if branch is Master
+          command: |
+             eb use server-backend-env --profile eb-cli
+             eb deploy -v --staged --profile eb-cli
 workflows:
   version: 2
-  main:
+  build-deploy:
     jobs:
-      - build:
-          filters:
-            tags:
-              only: /^\d{4}\.\d+$/
       - deploy:
-          requires:
-            - build
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^\d{4}\.\d+$/
+              only:
+                - master
+                - develop
