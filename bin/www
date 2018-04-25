@@ -1,0 +1,4 @@
+var app = require('../app.js')
+var secrets = require('../secrets/secrets.js')
+
+app.set('port', secrets.port || 3000)
