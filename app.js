@@ -26,3 +26,5 @@ app.use('/trips', trips)
 
 
 app.listen(secrets.port || 8081, () => console.log('Vagary api listening on port: ' + secrets.port + '!'))
+
+module.exports = app
